@@ -20,7 +20,7 @@ export class Product {
   @Column()
   stock: number;
 
-  @Column()
+  @Column('decimal')
   price: number;
 
   @Column({ default: true })
