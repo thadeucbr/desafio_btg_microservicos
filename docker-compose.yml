@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    container_name: database_pg
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "admin"
+    logging:
+      driver: none
+    ports:
+      - 5432:5432
+    volumes:
+      - .:/usr/db/pg
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  api_consumer:
+    build: ./consumer
+    command: npm run start:dev
+    volumes:
+      - ./consumer:/usr/src/app
+    ports:
+      - 3000:3000
+
+  api_producer:
+    build: ./producer
+    command: npm run start:dev
+    volumes:
+      - ./producer:/usr/src/app
+    ports:
+      - 3001:3001
