@@ -12,9 +12,7 @@ export class AppService {
   products: ProductDto[] = [];
 
   handleProduct(product: ProductDto) {
-    console.log('Product received:', product);
     const newProduct = this.productRepository.create(product);
-    console.log(newProduct)
     return this.productRepository.save(newProduct);
   }
 
