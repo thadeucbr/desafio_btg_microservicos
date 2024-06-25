@@ -1,5 +1,5 @@
 export class OrderDto {
-  clientId: string;
+  clientId: number;
   products: Array<{
     productId: string;
     quantity: number;

@@ -18,6 +18,7 @@ import { Product } from './product.entity';
       entities: [Client, Order, Product],
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([Product, Client, Order]),
   ],
   controllers: [AppController],
   providers: [AppService],
