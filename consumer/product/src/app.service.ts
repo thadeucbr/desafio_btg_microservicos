@@ -9,7 +9,6 @@ export class AppService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
   ) {}
-  products: ProductDto[] = [];
 
   handleProduct(product: ProductDto) {
     const newProduct = this.productRepository.create(product);
