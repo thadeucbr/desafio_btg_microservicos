@@ -24,7 +24,7 @@ export class Order {
   @JoinTable()
   products: Product[];
 
-  @Column()
+  @Column('decimal')
   total: number;
 
   @CreateDateColumn()
