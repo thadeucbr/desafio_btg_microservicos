@@ -18,4 +18,16 @@ export class OrderService {
   getOrders() {
     return this.rabbitClient.send({ cmd: 'fetch-orders' }, {}).pipe(timeout(5000));
   }
+
+  getOrder(id: number) {
+    return this.rabbitClient.send({ cmd: 'fetch-order' }, { id }).pipe(timeout(5000));
+  }
+
+  deleteOrder(id: number) {
+    this.rabbitClient.emit('delete_order', { id });
+
+    return {
+      message: 'Order deleted!',
+    };
+  }
 }
