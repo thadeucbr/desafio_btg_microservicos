@@ -17,7 +17,7 @@ export class AppController {
     return this.appService.getOrders();
   }
 
-  @MessagePattern({ cmd: 'delete-order' })
+  @EventPattern('delete_order')
   deleteOrder(id: number) {
     return this.appService.deleteOrder(id);
   }

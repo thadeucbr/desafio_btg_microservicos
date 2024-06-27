@@ -51,8 +51,8 @@ export class AppService {
           total: order.total,
           createdAt: order.createdAt,
           client: {
-            name: order.client.name,
-            email: order.client.email,
+            name: order.client?.name || 'Disabled',
+            email: order.client?.email || 'Disabled',
           },
           products: order.products.map((product) => ({
             name: product.name,
