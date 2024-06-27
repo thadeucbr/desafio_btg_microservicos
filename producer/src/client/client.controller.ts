@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { ClientDto } from './client.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -29,7 +29,7 @@ export class ClientController {
   @ApiOperation({ summary: 'Update a client' })
   @ApiResponse({ status: 202, description: 'Client updated' })
   @ApiBody({ type: ClientDto })
-  async updateClient(@Body() data: ClientDto, @Query('id') id: number) {
+  async updateClient(@Body() data: ClientDto, @Param('id') id: number) {
     return this.clientService.updateClient(id, data);
   }
 
@@ -37,7 +37,7 @@ export class ClientController {
   @HttpCode(202)
   @ApiOperation({ summary: 'Delete a client' })
   @ApiResponse({ status: 202, description: 'Client deleted' })
-  deleteClient(@Query('id') id: number) {
+  deleteClient(@Param('id') id: number) {
     return this.clientService.deleteClient(id);
   }
 
@@ -45,7 +45,7 @@ export class ClientController {
   @ApiOperation({ summary: 'Get a client' })
   @ApiResponse({ status: 200, description: 'Client retrieved' })
   @ApiResponse({ status: 404, description: 'Client not found' })
-  async getClient(@Query('id') id: number) {
+  async getClient(@Param('id') id: number) {
     const client = await this.clientService.getClient(id).toPromise();
     if (!client) {
       throw new NotFoundException();
