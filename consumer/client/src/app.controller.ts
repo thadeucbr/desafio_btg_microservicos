@@ -16,4 +16,19 @@ export class AppController {
   getClients() {
     return this.appService.getClients();
   }
+
+  @MessagePattern({ cmd: 'update-client' })
+  updateClient(@Payload() data: { id: number; client: ClientDto }) {
+    return this.appService.updateClient(data.id, data.client);
+  }
+
+  @MessagePattern({ cmd: 'delete-client' })
+  deleteClient(@Payload() id: number) {
+    return this.appService.deleteClient(id);
+  }
+
+  @MessagePattern({ cmd: 'fetch-client' })
+  getClient(@Payload() id: number) {
+    return this.appService.getClient(id);
+  }
 }

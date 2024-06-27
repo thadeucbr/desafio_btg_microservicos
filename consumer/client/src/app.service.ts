@@ -16,7 +16,20 @@ export class AppService {
     return this.clientRepository.save(newClient);
   }
 
+  updateClient(id: number, client: ClientDto) {
+    console.log('Client updated:', client);
+    return this.clientRepository.update(id, client);
+  }
+
+  deleteClient(id: number) {
+    console.log('Client deleted:', id);
+    return this.clientRepository.softDelete(id);
+  }
   getClients() {
     return this.clientRepository.find();
+  }
+
+  getClient(id: number) {
+    return this.clientRepository.findOne({ where: { id } });
   }
 }
