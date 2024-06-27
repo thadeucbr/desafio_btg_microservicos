@@ -19,4 +19,16 @@ export class AppService {
     const response = await this.productRepository.find();
     return response;
   }
+
+  async updateProduct(id: number, product: ProductDto) {
+    return this.productRepository.update(id, product);
+  }
+
+  async deleteProduct(id: number) {
+    return this.productRepository.softDelete(id);
+  }
+
+  async getProduct(id: number) {
+    return this.productRepository.findOne({ where: { id } });
+  }
 }
