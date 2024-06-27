@@ -16,4 +16,14 @@ export class AppController {
   getOrders() {
     return this.appService.getOrders();
   }
+
+  @MessagePattern({ cmd: 'delete-order' })
+  deleteOrder(id: number) {
+    return this.appService.deleteOrder(id);
+  }
+
+  @MessagePattern({ cmd: 'fetch-order' })
+  getOrder(id: number) {
+    return this.appService.getOrder(id);
+  }
 }

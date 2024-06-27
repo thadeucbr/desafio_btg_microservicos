@@ -42,7 +42,7 @@ export class AppService {
     console.log('Order created:', order);
   }
 
-  getOrders() {
+  async getOrders() {
     return this.orderRepository
       .find({ relations: ['client', 'products'] })
       .then((orders) =>
@@ -67,5 +67,9 @@ export class AppService {
       where: { id },
       relations: ['client', 'products'],
     });
+  }
+
+  deleteOrder(id: number) {
+    return this.orderRepository.softDelete(id);
   }
 }
