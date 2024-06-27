@@ -10,7 +10,8 @@ export class ClientController {
 
   @Post('create-client')
   @ApiOperation({ summary: 'Create a client' })
-  @ApiResponse({ status: 201, description: 'Client created' })
+  @HttpCode(202)
+  @ApiResponse({ status: 202, description: 'Client created' })
   @ApiBody({ type: ClientDto })
   createClient(@Body() client: ClientDto) {
     return this.clientService.createClient(client);
@@ -24,22 +25,18 @@ export class ClientController {
   }
 
   @Post('update-client/:id')
-  @HttpCode(204)
+  @HttpCode(202)
   @ApiOperation({ summary: 'Update a client' })
-  @ApiResponse({ status: 204, description: 'Client updated' })
-  @ApiResponse({ status: 404, description: 'Client not found' })
+  @ApiResponse({ status: 202, description: 'Client updated' })
   @ApiBody({ type: ClientDto })
   async updateClient(@Body() data: ClientDto, @Query('id') id: number) {
-    const updatedRows = await this.clientService.updateClient(id, data).toPromise();
-    if (updatedRows.affected === 0) {
-      throw new NotFoundException();
-    }
+    return this.clientService.updateClient(id, data);
   }
 
   @Delete('delete-client/:id')
-  @HttpCode(204)
+  @HttpCode(202)
   @ApiOperation({ summary: 'Delete a client' })
-  @ApiResponse({ status: 204, description: 'Client deleted' })
+  @ApiResponse({ status: 202, description: 'Client deleted' })
   deleteClient(@Query('id') id: number) {
     return this.clientService.deleteClient(id);
   }
