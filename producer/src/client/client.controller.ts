@@ -17,16 +17,23 @@ export class ClientController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all clients' })
+  @ApiResponse({ status: 200, description: 'Clients retrieved' })
   getClients() {
     return this.clientService.getClients();
   }
 
   @Post('update-client/:id')
+  @HttpCode(204)
   @ApiOperation({ summary: 'Update a client' })
-  @ApiResponse({ status: 200, description: 'Client updated' })
+  @ApiResponse({ status: 204, description: 'Client updated' })
+  @ApiResponse({ status: 404, description: 'Client not found' })
   @ApiBody({ type: ClientDto })
-  updateClient(@Body() data: ClientDto, @Query('id') id: number) {
-    return this.clientService.updateClient(id, data);
+  async updateClient(@Body() data: ClientDto, @Query('id') id: number) {
+    const updatedRows = await this.clientService.updateClient(id, data).toPromise();
+    if (updatedRows.affected === 0) {
+      throw new NotFoundException();
+    }
   }
 
   @Delete('delete-client/:id')
