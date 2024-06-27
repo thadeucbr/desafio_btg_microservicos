@@ -18,6 +18,8 @@ export class OrderController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all orders' })
+  @ApiResponse({ status: 200, description: 'Orders retrieved' })
   getOrders() {
     return this.orderService.getOrders();
   }
