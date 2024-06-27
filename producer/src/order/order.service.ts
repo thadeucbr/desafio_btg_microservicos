@@ -20,7 +20,7 @@ export class OrderService {
   }
 
   getOrder(id: number) {
-    return this.rabbitClient.send({ cmd: 'fetch-order' }, { id }).pipe(timeout(5000));
+    return this.rabbitClient.send({ cmd: 'fetch-order' }, id).pipe(timeout(5000));
   }
 
   deleteOrder(id: number) {
