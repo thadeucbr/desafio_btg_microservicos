@@ -17,12 +17,12 @@ export class AppController {
     return this.appService.getClients();
   }
 
-  @MessagePattern({ cmd: 'update-client' })
+  @EventPattern('update-client')
   updateClient(@Payload() data: { id: number; client: ClientDto }) {
     return this.appService.updateClient(data.id, data.client);
   }
 
-  @MessagePattern({ cmd: 'delete-client' })
+  @EventPattern('delete-client')
   deleteClient(@Payload() id: number) {
     return this.appService.deleteClient(id);
   }
