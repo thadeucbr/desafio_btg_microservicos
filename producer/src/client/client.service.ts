@@ -20,14 +20,17 @@ export class ClientService {
   }
 
   updateClient(id: number, client: ClientDto) {
-    return this.client.send({ cmd: 'update-client' }, { id, client });
+    this.client.emit('update-client', { id, client });
+    return {
+      message: 'Client updated!',
+    };
   }
 
   deleteClient(id: number) {
-    return this.client.send({ cmd: 'delete-client' }, id);
+    return this.client.emit('delete-client', id);
   }
 
   getClient(id: number) {
-    return this.client.send({ cmd: 'fetch-client' }, id);
+    return this.client.send({ cmd: 'fetch-client' }, id).pipe(timeout(5000));
   }
 }
