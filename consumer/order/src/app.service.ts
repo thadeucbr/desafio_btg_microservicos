@@ -43,6 +43,7 @@ export class AppService {
   }
 
   async getOrders(query: GetOrderDto) {
+    console.log('Query received:', query);
     return this.orderRepository
       .find({
         relations: ['client', 'products'],
