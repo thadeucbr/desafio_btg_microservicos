@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { OrderDto } from './order.dto';
+import { GetOrderDto, OrderDto } from './order.dto';
 import { timeout } from 'rxjs';
 
 @Injectable()
@@ -15,8 +15,8 @@ export class OrderService {
     };
   }
 
-  getOrders() {
-    return this.rabbitClient.send({ cmd: 'fetch-orders' }, {}).pipe(timeout(5000));
+  getOrders(query: GetOrderDto) {
+    return this.rabbitClient.send({ cmd: 'fetch-orders' }, query).pipe(timeout(5000));
   }
 
   getOrder(id: number) {

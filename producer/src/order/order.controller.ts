@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { OrderDto } from './order.dto';
+import { GetOrderDto, OrderDto } from './order.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('orders')
@@ -20,8 +20,8 @@ export class OrderController {
   @Get()
   @ApiOperation({ summary: 'Get all orders' })
   @ApiResponse({ status: 200, description: 'Orders retrieved' })
-  getOrders() {
-    return this.orderService.getOrders();
+  getOrders(@Query() query: GetOrderDto) {
+    return this.orderService.getOrders(query);
   }
 
   @Delete('delete-order/:id')

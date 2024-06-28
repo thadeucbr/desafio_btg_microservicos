@@ -30,3 +30,8 @@ export class OrderDto {
   })
   products: OrderProductDto[];
 }
+
+export class GetOrderDto {
+  @ApiProperty({ example: 1, description: 'The User ID', required: false })
+  userId: number;
+}
