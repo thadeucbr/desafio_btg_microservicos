@@ -14,16 +14,19 @@ export class Client {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   email: string;
+
+  @Column({ nullable: false })
+  password: string;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   phone: string;
 
   @OneToMany(() => Order, (order) => order.client)
