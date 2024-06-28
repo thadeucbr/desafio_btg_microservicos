@@ -4,7 +4,7 @@ import { In, Repository } from 'typeorm';
 import { Order } from './order.entity';
 import { Client } from './client.entity';
 import { Product } from './product.entity';
-import { OrderDto } from './order.dto';
+import { GetOrderDto, OrderDto } from './order.dto';
 
 @Injectable()
 export class AppService {
@@ -42,9 +42,12 @@ export class AppService {
     console.log('Order created:', order);
   }
 
-  async getOrders() {
+  async getOrders(query: GetOrderDto) {
     return this.orderRepository
-      .find({ relations: ['client', 'products'] })
+      .find({
+        relations: ['client', 'products'],
+        where: { client: { id: query.userId } },
+      })
       .then((orders) =>
         orders.map((order) => ({
           id: order.id,

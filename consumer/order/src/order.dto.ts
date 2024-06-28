@@ -5,3 +5,7 @@ export class OrderDto {
     quantity: number;
   }>;
 }
+
+export class GetOrderDto {
+  userId?: number;
+}
