@@ -7,7 +7,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   imports: [
     ClientsModule.register([
       {
-        name: 'PRODUCT_SERVICE',
+        name: 'LOGIN_SERVICE',
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://192.168.0.227'],
