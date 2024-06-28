@@ -7,8 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
-  .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
-  .setTitle('Cats example')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
+    .setTitle('Cats example')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .build();
