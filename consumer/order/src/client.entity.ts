@@ -29,6 +29,9 @@ export class Client {
   @Column({ nullable: true, unique: true })
   phone: string;
 
+  @Column({ enum: ['admin', 'client'], default: 'client' })
+  role: string;
+
   @OneToMany(() => Order, (order) => order.client)
   orders: Order[];
 
