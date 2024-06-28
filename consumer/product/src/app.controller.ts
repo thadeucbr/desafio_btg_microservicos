@@ -17,12 +17,12 @@ export class AppController {
     return await this.appService.getProducts();
   }
 
-  @MessagePattern({ cmd: 'update-product' })
+  @EventPattern('update-product')
   async updateProduct(data: { id: number; product: ProductDto }) {
     return await this.appService.updateProduct(data.id, data.product);
   }
 
-  @MessagePattern({ cmd: 'delete-product' })
+  @EventPattern('delete-product')
   async deleteProduct(id: number) {
     return await this.appService.deleteProduct(id);
   }
