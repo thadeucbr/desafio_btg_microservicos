@@ -17,7 +17,7 @@ export class AppService {
       where: { email: userData.username },
     });
     if (client) {
-      const payload = { sub: client.id };
+      const payload = { sub: client.id, role: client.role };
       const isValid = await bcrypt.compare(userData.password, client.password);
       if (isValid) {
         return {
