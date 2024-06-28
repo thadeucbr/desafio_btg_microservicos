@@ -3,7 +3,7 @@ import { ClientDto } from './clients.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from './client.entity';
 import { Repository } from 'typeorm';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AppService {
   constructor(
@@ -11,8 +11,9 @@ export class AppService {
   ) {}
 
   handleClient(client: ClientDto) {
-    console.log('Client received:', client);
     const newClient = this.clientRepository.create(client);
+    newClient.password = bcrypt.hashSync(newClient.password, 10);
+    console.log('Client received:', newClient);
     return this.clientRepository.save(newClient);
   }
 
