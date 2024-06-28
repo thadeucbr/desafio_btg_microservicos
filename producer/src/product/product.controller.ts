@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './product.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -33,7 +33,7 @@ export class ProductController {
     return this.productService.updateProduct(data.id, data.product);
   }
 
-  @Post('delete-product/:id')
+  @Delete('delete-product/:id')
   @HttpCode(202)
   @ApiOperation({ summary: 'Delete a product' })
   @ApiResponse({ status: 202, description: 'Product deleted' })
