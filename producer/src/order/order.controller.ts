@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { GetOrderDto, OrderDto } from './order.dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('orders')
 @Controller('orders')
@@ -9,6 +10,8 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post('place-order')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(202)
   @ApiOperation({ summary: 'Place an order' })
   @ApiResponse({ status: 202, description: 'Order placed' })
