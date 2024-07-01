@@ -1,19 +1,23 @@
-version: '3'
+version: '3.8'
 
 services:
   postgres:
     image: postgres
     container_name: database_pg
     restart: always
-    environment:
-      POSTGRES_PASSWORD: "admin"
-      POSTGRES_USER: "admin"
+    env_file:
+      - .env
     logging:
       driver: none
     ports:
       - 5432:5432
     volumes:
-      - .:/usr/db/pg
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -23,18 +27,82 @@ services:
       - 5672:5672
       - 15672:15672
 
-  api_consumer:
-    build: ./consumer
-    command: npm run start:dev
+  consumer_client:
+    image: node:alpine
+    command: /bin/sh -c "npm install && npm run start:dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    env_file:
+      - .env
     volumes:
-      - ./consumer:/usr/src/app
-    ports:
-      - 3000:3000
+      - ./consumer/client:/usr/src/app
+    working_dir: /usr/src/app
+
+  consumer_login:
+    image: node:alpine
+    command: /bin/sh -c "npm install && npm run start:dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    env_file:
+      - .env
+    volumes:
+      - ./consumer/login:/usr/src/app
+    working_dir: /usr/src/app
+
+  consumer_order:
+    image: node:alpine
+    command: /bin/sh -c "npm install && npm run start:dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    env_file:
+      - .env
+    volumes:
+      - ./consumer/order:/usr/src/app
+    working_dir: /usr/src/app
+
+  consumer_product:
+    image: node:alpine
+    command: /bin/sh -c "npm install && npm run start:dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    env_file:
+      - .env
+    volumes:
+      - ./consumer/product:/usr/src/app
+    working_dir: /usr/src/app
 
   api_producer:
-    build: ./producer
-    command: npm run start:dev
+    image: node:alpine
+    command: /bin/sh -c "npm install && npm run start:dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    env_file:
+      - .env
     volumes:
       - ./producer:/usr/src/app
+    working_dir: /usr/src/app
     ports:
       - 3001:3001
+
+volumes:
+  pgdata:
+  clientdata:
+  logindata:
+  orderdata:
+  productdata:
+  producerdata:
