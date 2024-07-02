@@ -10,12 +10,12 @@ import { Product } from './product.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: '192.168.0.227',
+      host: process.env.DATABASE_URL,
       port: 5432,
-      username: 'postgres',
-      password: 'thadeu',
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
       database: 'btg',
-      entities: [Client, Order, Product],
+      entities: [Client, Product, Order],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([Product]),

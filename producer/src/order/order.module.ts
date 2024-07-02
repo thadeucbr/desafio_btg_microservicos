@@ -15,7 +15,7 @@ import { JwtStrategy } from 'src/strategy/jwt.strategy';
         name: 'ORDER_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://192.168.0.227'],
+          urls: [process.env.RABBITMQ_URL],
           queue: 'order_queue',
           queueOptions: {
             durable: true,

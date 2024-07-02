@@ -7,7 +7,7 @@ async function bootstrap() {
     AppModule,
     {
       transport: Transport.RMQ,
-      options: { urls: ['amqp://192.168.0.227'], queue: 'order_queue' },
+      options: { urls: [process.env.RABBITMQ_URL], queue: 'order_queue' },
     },
   );
   await app.listen();
