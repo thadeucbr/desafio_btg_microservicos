@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsPhoneNumber, IsString, IsStrongPassword, MinLength } from 'class-validator';
 
 export class ClientDto {
   @IsString()
@@ -22,4 +22,13 @@ export class ClientDto {
     description: 'The phone number of the client',
   })
   phone: string;
+
+  @IsStrongPassword({ minLength: 6 })
+  @ApiProperty({
+    example: 'password123',
+    description: 'The password of the client',
+  })
+  password: string;
+
+  role: ['admin', 'client']
 }
