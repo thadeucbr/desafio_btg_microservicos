@@ -23,7 +23,7 @@ export class ClientDto {
   })
   phone: string;
 
-  @IsStrongPassword({ minLength: 6 })
+  @IsString()
   @ApiProperty({
     example: 'password123',
     description: 'The password of the client',
