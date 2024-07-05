@@ -1,14 +1,20 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './product.dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { JwtAuthGuard } from 'src/guards/auth.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @ApiTags('products')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth()
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post('add-product')
+  @Roles('admin')
   @HttpCode(202)
   @ApiOperation({ summary: 'Add a product' })
   @ApiResponse({ status: 202, description: 'Product added' })
@@ -25,6 +31,7 @@ export class ProductController {
   }
 
   @Post('update-product/:id')
+  @Roles('admin')
   @HttpCode(202)
   @ApiOperation({ summary: 'Update a product' })
   @ApiResponse({ status: 202, description: 'Product updated' })
@@ -34,6 +41,7 @@ export class ProductController {
   }
 
   @Delete('delete-product/:id')
+  @Roles('admin')
   @HttpCode(202)
   @ApiOperation({ summary: 'Delete a product' })
   @ApiResponse({ status: 202, description: 'Product deleted' })
