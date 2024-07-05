@@ -5,11 +5,12 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/strategy/jwt.strategy';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({ secret: 'secret', signOptions: { expiresIn: '1d' } }),
+    JwtModule.register({ secret: process.env.SECRET, signOptions: { expiresIn: '1d' } }),
     ClientsModule.register([
       {
         name: 'ORDER_SERVICE',
@@ -25,6 +26,6 @@ import { JwtStrategy } from 'src/strategy/jwt.strategy';
     ]),
   ],
   controllers: [OrderController],
-  providers: [OrderService, JwtStrategy],
+  providers: [OrderService, JwtStrategy, RolesGuard],
 })
 export class OrderModule {}
