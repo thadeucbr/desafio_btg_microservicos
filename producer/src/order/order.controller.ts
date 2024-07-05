@@ -1,17 +1,19 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { GetOrderDto, OrderDto } from './order.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/guards/auth.guard';
+import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 
 @ApiTags('orders')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth()
 @Controller('orders')
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(private readonly orderService: OrderService, private readonly jwtService: JwtService) {}
 
   @Post('place-order')
   @HttpCode(202)
@@ -23,11 +25,16 @@ export class OrderController {
   }
 
   @Get()
-  @Roles('admin')
   @ApiOperation({ summary: 'Get all orders' })
   @ApiResponse({ status: 200, description: 'Orders retrieved' })
-  getOrders(@Query() query: GetOrderDto) {
-    return this.orderService.getOrders(query);
+  getOrders(@Query() query: GetOrderDto, @Req() req: Request) {
+    const token = req.headers.authorization.replace('Bearer ', '');
+    const decoded = this.jwtService.decode(token);
+
+    if (decoded.role === 'admin') { 
+      return this.orderService.getOrders(query);
+    }
+    return this.orderService.getOrders({ userId: decoded.id });
   }
 
   @Delete('delete-order/:id')
