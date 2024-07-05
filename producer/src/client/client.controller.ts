@@ -10,7 +10,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 @Controller('clients')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
-  
+
   @Post('create-client')
   @ApiOperation({ summary: 'Create a client' })
   @HttpCode(202)
@@ -19,7 +19,7 @@ export class ClientController {
   createClient(@Body() client: ClientDto) {
     return this.clientService.createClient(client);
   }
-  
+
   @Get()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)

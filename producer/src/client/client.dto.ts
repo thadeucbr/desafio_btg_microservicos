@@ -30,5 +30,5 @@ export class ClientDto {
   })
   password: string;
 
-  role: ['admin', 'client']
+  role: ['admin', 'client'];
 }

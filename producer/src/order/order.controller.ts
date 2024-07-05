@@ -12,7 +12,7 @@ import { JwtAuthGuard } from 'src/guards/auth.guard';
 @Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
-  
+
   @Post('place-order')
   @HttpCode(202)
   @ApiOperation({ summary: 'Place an order' })
