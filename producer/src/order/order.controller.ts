@@ -2,16 +2,18 @@ import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post
 import { OrderService } from './order.service';
 import { GetOrderDto, OrderDto } from './order.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/guards/auth.guard';
 
 @ApiTags('orders')
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
-
+  
   @Post('place-order')
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
   @HttpCode(202)
   @ApiOperation({ summary: 'Place an order' })
   @ApiResponse({ status: 202, description: 'Order placed' })
@@ -21,6 +23,8 @@ export class OrderController {
   }
 
   @Get()
+  @ApiBearerAuth()
+  @Roles('admin')
   @ApiOperation({ summary: 'Get all orders' })
   @ApiResponse({ status: 200, description: 'Orders retrieved' })
   getOrders(@Query() query: GetOrderDto) {
