@@ -1,13 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, UseGuards } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { ClientDto } from './client.dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @ApiTags('clients')
 @Controller('clients')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
-
+  
   @Post('create-client')
   @ApiOperation({ summary: 'Create a client' })
   @HttpCode(202)
@@ -16,8 +19,11 @@ export class ClientController {
   createClient(@Body() client: ClientDto) {
     return this.clientService.createClient(client);
   }
-
+  
   @Get()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   @ApiOperation({ summary: 'Get all clients' })
   @ApiResponse({ status: 200, description: 'Clients retrieved' })
   getClients() {
@@ -25,6 +31,7 @@ export class ClientController {
   }
 
   @Post('update-client/:id')
+  @ApiBearerAuth()
   @HttpCode(202)
   @ApiOperation({ summary: 'Update a client' })
   @ApiResponse({ status: 202, description: 'Client updated' })
@@ -34,6 +41,7 @@ export class ClientController {
   }
 
   @Delete('delete-client/:id')
+  @ApiBearerAuth()
   @HttpCode(202)
   @ApiOperation({ summary: 'Delete a client' })
   @ApiResponse({ status: 202, description: 'Client deleted' })
@@ -42,6 +50,9 @@ export class ClientController {
   }
 
   @Get('client/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   @ApiOperation({ summary: 'Get a client' })
   @ApiResponse({ status: 200, description: 'Client retrieved' })
   @ApiResponse({ status: 404, description: 'Client not found' })
