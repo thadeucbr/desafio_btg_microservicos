@@ -8,12 +8,12 @@ import { JwtAuthGuard } from 'src/guards/auth.guard';
 
 @ApiTags('orders')
 @UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth()
 @Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
   
   @Post('place-order')
-  @ApiBearerAuth()
   @HttpCode(202)
   @ApiOperation({ summary: 'Place an order' })
   @ApiResponse({ status: 202, description: 'Order placed' })
@@ -23,7 +23,6 @@ export class OrderController {
   }
 
   @Get()
-  @ApiBearerAuth()
   @Roles('admin')
   @ApiOperation({ summary: 'Get all orders' })
   @ApiResponse({ status: 200, description: 'Orders retrieved' })
