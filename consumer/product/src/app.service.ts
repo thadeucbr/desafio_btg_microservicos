@@ -21,7 +21,7 @@ export class AppService {
   }
 
   async updateProduct(id: number, product: ProductDto) {
-    return this.productRepository.update(id, product);
+    return this.productRepository.update({ id }, { ...product });
   }
 
   async deleteProduct(id: number) {
