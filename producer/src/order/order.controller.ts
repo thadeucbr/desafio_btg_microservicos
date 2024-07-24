@@ -20,7 +20,13 @@ export class OrderController {
   @ApiOperation({ summary: 'Place an order' })
   @ApiResponse({ status: 202, description: 'Order placed' })
   @ApiBody({ type: OrderDto })
-  placeOrder(@Body() order: OrderDto) {
+  placeOrder(@Body() order: OrderDto, @Req() req: Request) {
+    const token = req.headers.authorization.replace('Bearer ', '');
+    const decoded = this.jwtService.decode(token);
+    if (decoded.role === 'admin') { 
+      return this.orderService.placeOrder(order);
+    }
+    order.clientId = decoded.sub;
     return this.orderService.placeOrder(order);
   }
 
@@ -34,7 +40,8 @@ export class OrderController {
     if (decoded.role === 'admin') { 
       return this.orderService.getOrders(query);
     }
-    return this.orderService.getOrders({ userId: decoded.id });
+
+    return this.orderService.getOrders({ userId: decoded.sub });
   }
 
   @Delete('delete-order/:id')
