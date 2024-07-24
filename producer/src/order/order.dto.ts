@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsNumber, IsString, Min, MinLength, ValidateNested } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString, Min, MinLength, ValidateNested } from 'class-validator';
 
 export class OrderProductDto {
   @IsString()
@@ -16,9 +16,10 @@ export class OrderProductDto {
 
 export class OrderDto {
   @IsString()
+  @IsOptional()
   @MinLength(1)
   @ApiProperty({ example: '123456789', description: 'The client ID' })
-  clientId: string;
+  clientId?: string;
 
   @IsArray()
   @ValidateNested({ each: true })
