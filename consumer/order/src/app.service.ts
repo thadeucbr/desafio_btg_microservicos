@@ -22,12 +22,15 @@ export class AppService {
     const products = await this.productRepository.findBy({
       id: In(orderDto.products.map((p) => p.productId)),
     });
-    products.forEach((product) => { 
-      const orderProduct = orderDto.products.find((p) => p.productId === product.id.toString());
+    products.forEach((product) => {
+      const orderProduct = orderDto.products.find(
+        (p) => p.productId === product.id.toString(),
+      );
       if (product.stock < orderProduct.quantity) {
         throw new Error(`Product ${product.name} is out of stock`);
       }
-    })
+    });
+
     const totalPrice = orderDto.products.map((p) => {
       {
         const product = products.find(
@@ -50,7 +53,7 @@ export class AppService {
       );
       product.stock -= Number(p.quantity);
       await this.productRepository.save(product);
-    })
+    });
 
     console.log('Order created:', order);
   }
