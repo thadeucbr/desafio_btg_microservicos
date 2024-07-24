@@ -39,11 +39,18 @@ export class AppService {
 
     await this.orderRepository.save(order);
 
+    orderDto.products.forEach(async (p) => {
+      const product = products.find(
+        (product) => product.id === Number(p.productId),
+      );
+      product.stock -= Number(p.quantity);
+      await this.productRepository.save(product);
+    })
+
     console.log('Order created:', order);
   }
 
   async getOrders(query: GetOrderDto) {
-    console.log('Query received:', query);
     return this.orderRepository
       .find({
         relations: ['client', 'products'],
