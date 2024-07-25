@@ -19,6 +19,7 @@ export class AppController {
 
   @EventPattern('update-product')
   async updateProduct(data: { id: number; product: ProductDto }) {
+    console.log(data)
     return await this.appService.updateProduct(data.id, data.product);
   }
 
