@@ -5,6 +5,7 @@ import { Order } from './order.entity';
 import { Client } from './client.entity';
 import { Product } from './product.entity';
 import { GetOrderDto, OrderDto } from './order.dto';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class AppService {
@@ -90,5 +91,31 @@ export class AppService {
 
   deleteOrder(id: number) {
     return this.orderRepository.softDelete(id);
+  }
+
+  @Cron('*/5 * * * *')
+  async checkPendingOrders() {
+    console.log('Checking pending orders');
+    const pendingOrders = await this.orderRepository.find({
+      where: { status: 'pending' },
+      relations: ['products'],
+    });
+
+    const now = new Date();
+
+    for (const order of pendingOrders) {
+      const orderAge =
+        (now.getTime() - new Date(order.createdAt).getTime()) /
+        (1000 * 60 * 60 * 24);
+      if (orderAge >= 1) {
+        order.status = 'cancelled';
+        await this.orderRepository.save(order);
+
+        for (const product of order.products) {
+          product.stock += 1;
+          await this.productRepository.save(product);
+        }
+      }
+    }
   }
 }
