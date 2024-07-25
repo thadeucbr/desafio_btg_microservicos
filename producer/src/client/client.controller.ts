@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, UseGuards } from '@nestjs/common';
 import { ClientService } from './client.service';
-import { ClientDto } from './client.dto';
+import { ClientDto, UpdateClientDTO } from './client.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -36,7 +36,7 @@ export class ClientController {
   @ApiOperation({ summary: 'Update a client' })
   @ApiResponse({ status: 202, description: 'Client updated' })
   @ApiBody({ type: ClientDto })
-  async updateClient(@Body() data: ClientDto, @Param('id') id: number) {
+  async updateClient(@Body() data: UpdateClientDTO, @Param('id') id: number) {
     return this.clientService.updateClient(id, data);
   }
 

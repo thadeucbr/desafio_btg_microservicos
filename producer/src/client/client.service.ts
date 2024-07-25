@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ClientDto } from './client.dto';
+import { ClientDto, UpdateClientDTO } from './client.dto';
 import { timeout } from 'rxjs';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class ClientService {
     return this.client.send({ cmd: 'fetch-clients' }, {}).pipe(timeout(5000));
   }
 
-  updateClient(id: number, client: ClientDto) {
+  updateClient(id: number, client: UpdateClientDTO) {
     this.client.emit('update-client', { id, client });
     return {
       message: 'Client updated!',

@@ -1,5 +1,6 @@
+import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsPhoneNumber, IsString, IsStrongPassword, MinLength } from 'class-validator';
+import { IsEmail, IsPhoneNumber, IsString, MinLength } from 'class-validator';
 
 export class ClientDto {
   @IsString()
@@ -32,3 +33,5 @@ export class ClientDto {
 
   role: ['admin', 'client'];
 }
+
+export class UpdateClientDTO extends PartialType(ClientDto) {}
