@@ -35,4 +35,10 @@ export class Order {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @Column({
+    default: 'pending',
+    enum: ['pending', 'completed', 'cancelled', 'shipping'],
+  })
+  status: string;
 }
