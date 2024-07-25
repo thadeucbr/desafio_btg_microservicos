@@ -1,13 +1,13 @@
-import { Order } from './order.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  OneToMany,
   CreateDateColumn,
-  DeleteDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
+import { OrderProduct } from './orderProduct.entity';
 
 @Entity()
 export class Product {
@@ -26,8 +26,8 @@ export class Product {
   @Column({ default: true })
   isActive: boolean;
 
-  @ManyToMany(() => Order, (order) => order.products)
-  orders: Order[];
+  @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.product)
+  orderProducts: OrderProduct[];
 
   @CreateDateColumn()
   createdAt: Date;

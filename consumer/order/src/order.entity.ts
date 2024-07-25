@@ -1,16 +1,15 @@
-import { Client } from './client.entity';
-import { Product } from './product.entity';
 import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
   PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
+import { Client } from './client.entity';
+import { OrderProduct } from './orderProduct.entity';
 
 @Entity()
 export class Order {
@@ -20,9 +19,8 @@ export class Order {
   @ManyToOne(() => Client, (client) => client.orders)
   client: Client;
 
-  @ManyToMany(() => Product, (product) => product.orders)
-  @JoinTable()
-  products: Product[];
+  @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.order)
+  orderProducts: OrderProduct[];
 
   @Column('decimal')
   total: number;
