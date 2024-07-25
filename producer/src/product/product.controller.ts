@@ -38,8 +38,8 @@ export class ProductController {
   @ApiOperation({ summary: 'Update a product' })
   @ApiResponse({ status: 202, description: 'Product updated' })
   @ApiBody({ type: ProductDto })
-  updateProduct(@Param() data: { id: number; product: ProductDto }) {
-    return this.productService.updateProduct(data.id, data.product);
+  updateProduct(@Param('id') id: number, @Body() product: ProductDto) {
+    return this.productService.updateProduct(id, product);
   }
 
   @Delete('delete-product/:id')
